@@ -3,7 +3,7 @@ FROM wyveo/nginx-php-fpm:php81
 COPY . /usr/share/nginx
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-WORKDIR /usr/share/nginx/html
+WORKDIR /usr/share/nginx
 
 RUN apt update; \ 
     apt install vim -y
@@ -11,7 +11,7 @@ RUN apt update; \
 RUN ln -s public html
 
 ADD . /var/www
-RUN chown -R www-data:www-data /var/www
+RUN sudo chmod o+w ./storage/ -R
 
 RUN apt -y update \
     && apt -y install curl \
