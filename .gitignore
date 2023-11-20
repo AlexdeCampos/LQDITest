@@ -17,3 +17,17 @@ yarn-error.log
 /.fleet
 /.idea
 /.vscode
+.docker/dbdata/auto.cnf
+.docker/dbdata/ca-key.pem
+.docker/dbdata/ca.pem
+.docker/dbdata/client-cert.pem
+.docker/dbdata/client-key.pem
+.docker/dbdata/ib_buffer_pool
+.docker/dbdata/ib_logfile0
+.docker/dbdata/ib_logfile1
+.docker/dbdata/ibdata1
+.docker/dbdata/ibtmp1
+.docker/dbdata/private_key.pem
+.docker/dbdata/public_key.pem
+.docker/dbdata/server-cert.pem
+.docker/dbdata/server-key.pem
