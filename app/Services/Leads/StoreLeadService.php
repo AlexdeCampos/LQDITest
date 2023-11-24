@@ -17,6 +17,6 @@ class StoreLeadService {
         $existEmail = Lead::where('email', $email)->first();
         if($existEmail){
 
-    throw ValidationException::withMessages(['message' => 'Email already exists!']);
+    throw ValidationException::withMessages(['message' => 'Email já cadastrado!']);
     }
 }}
