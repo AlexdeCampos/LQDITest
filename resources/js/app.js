@@ -6,7 +6,8 @@
 
 import "./bootstrap";
 import { createApp } from "vue";
-
+import ToastPlugin from "vue-toast-notification";
+import "vue-toast-notification/dist/theme-bootstrap.css";
 /**
  * Next, we will create a fresh Vue application instance. You may then begin
  * registering components with the application instance so they are ready
@@ -14,8 +15,8 @@ import { createApp } from "vue";
  */
 
 const app = createApp({});
-
-import LeadPageComponent from "./components/LeadPageComponent.vue";
+app.use(ToastPlugin);
+import LeadPageComponent from "./views/LeadPageComponent.vue";
 app.component("lead-page-component", LeadPageComponent);
 
 /**
