@@ -1,11 +1,18 @@
+import { useToast } from "vue-toast-notification";
+
 class AuthService {
     async login(formLogin) {
-        const { data } = await axios.post(
-            "/api/login",
-            { ...formLogin, device_name: "web" },
-            {}
-        );
-        localStorage.setItem("token", data.token);
+        const toast = useToast();
+        const { data } = await axios
+            .post("/api/login", { ...formLogin, device_name: "web" }, {})
+            .catch(({ response }) => {
+                toast.error(response.data.message);
+                return response;
+            });
+
+        if (data.token) {
+            localStorage.setItem("token", data.token);
+        }
     }
 
     async logout() {
