@@ -11,11 +11,3 @@ RUN apt update; \
 RUN ln -s public html
 
 ADD . /var/www
-RUN chmod -R 777 storage
-
-RUN apt -y update \
-    && apt -y install curl \
-    && curl -sL https://deb.nodesource.com/setup_16.x | bash - \
-    && apt -y install nodejs
-RUN npm install \ 
-    npm run dev
