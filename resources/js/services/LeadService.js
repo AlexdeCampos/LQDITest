@@ -18,6 +18,41 @@ class LeadService {
 
         return lead;
     }
+
+    async getLeads() {
+        const token = localStorage.getItem("token");
+
+        const { data } = await axios.get("/api/leads", {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+
+        return data;
+    }
+
+    async sendContactEmail(id) {
+        const toast = useToast();
+
+        const token = localStorage.getItem("token");
+        await axios
+            .post(
+                `/api/leads/${id}`,
+                {},
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            )
+            .then(() => {
+                toast.success("Email enviado com sucesso!");
+            })
+            .catch(({ response }) => {
+                toast.error(response.data.message);
+                return response;
+            });
+    }
 }
 
 export default LeadService;
