@@ -16,8 +16,10 @@ import "vue-toast-notification/dist/theme-bootstrap.css";
 
 const app = createApp({});
 app.use(ToastPlugin);
-import LeadPageComponent from "./views/LeadPageComponent.vue";
-app.component("lead-page-component", LeadPageComponent);
+import LeadPageView from "./views/LeadPageView.vue";
+import LeadListView from "./views/LeadListView.vue";
+app.component("lead-page-view", LeadPageView);
+app.component("lead-list-view", LeadListView);
 
 /**
  * The following block of code may be used to automatically register your
