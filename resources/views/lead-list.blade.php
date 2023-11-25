@@ -9,7 +9,7 @@
     </head>
     <body class="antialiased">
         <div id="app">
-            <lead-page-view/>
+            <lead-list-view/>
         </div>
          @vite(['resources/css/app.css'])
         @vite(['resources/js/app.js'])
