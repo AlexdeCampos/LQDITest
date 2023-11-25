@@ -20,7 +20,7 @@ class SendLeadContactEmailService {
         $lead = Lead::where('id', $id)->first();
 
         if(!$lead){
-            throw ValidationException::withMessages(['message' => 'Email already exists!']);
+            throw ValidationException::withMessages(['message' => 'Email não cadastrado!']);
         }
         return $lead;
     }
