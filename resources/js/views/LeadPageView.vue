@@ -2,7 +2,57 @@
     <div class="main">
         <div class="nav">
             <img src="/img/lqdi.svg" alt="" />
-            <button on-click="goToLogin">Login</button>
+            <div v-if="hasToken">
+                <button @click="goToLeads()">Leads</button>
+            </div>
+            <div v-else class="btn-group">
+                <button
+                    class="btn btn-secondary dropdown-toggle btn-dropdown-login"
+                    type="button"
+                    id="dropdownMenuButton"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
+                >
+                    Login
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <form class="px-4">
+                        <div class="mb-3">
+                            <label
+                                for="exampleDropdownFormEmail1"
+                                class="form-label"
+                                >Email</label
+                            >
+                            <input
+                                v-model="loginForm.email"
+                                type="email"
+                                class="form-control"
+                                id="exampleDropdownFormEmail1"
+                                placeholder="email@example.com"
+                            />
+                        </div>
+                        <div class="mb-3">
+                            <label
+                                for="exampleDropdownFormPassword1"
+                                class="form-label"
+                                >Senha</label
+                            >
+                            <input
+                                v-model="loginForm.password"
+                                type="password"
+                                class="form-control"
+                                id="exampleDropdownFormPassword1"
+                            />
+                        </div>
+                    </form>
+                    <button
+                        @click="makeLogin()"
+                        class="btn-dropdown-form-login"
+                    >
+                        Login
+                    </button>
+                </ul>
+            </div>
         </div>
         <div class="about">
             <div class="about-text">
@@ -21,29 +71,11 @@
             <div v-for="card in cards" :key="card.title">
                 <article-card-component-vue :card="card" />
             </div>
-            <!-- <div class="article-card">
-                <img src="/img/image-article-1.png" class="article-image" />
-                <h4>Por que é importante ter um site de qualidade?</h4>
-                <p>
-                    Um site de qualidade passou a ser um dos meios de exposição
-                    de marca mais eficientes no ambiente online. Ele funciona
-                    como uma especie de cartão...
-                </p>
-            </div>
-            <div class="article-card">
-                <img src="/img/image-article-2.png" class="article-image" />
-                <h4>Por que é importante ter um site de qualidade?</h4>
-                <p>
-                    Um site de qualidade passou a ser um dos meios de exposição
-                    de marca mais eficientes no ambiente online. Ele funciona
-                    como uma especie de cartão...
-                </p>
-            </div> -->
             <div class="newslatter-form">
-                <h2>
+                <h5>
                     Receba os nossos artigos de interesse na sua caixa de
                     entrada.
-                </h2>
+                </h5>
                 <form action="" method="post">
                     <input
                         v-model="leadForm.email"
@@ -60,7 +92,7 @@
                 </form>
                 <div class="newslatter-bottom">
                     <div class="social-medias">
-                        <h6>Siga-nos em nossas mídias sociais</h6>
+                        <small>Siga-nos em nossas mídias sociais</small>
                         <div class="icons">
                             <img src="img/instagram.svg" alt="" />
                             <img src="img/facebook.svg" alt="" />
@@ -79,8 +111,9 @@
 </template>
 
 <script>
-import { computed, ref } from "vue";
+import { computed, onMounted, reactive, ref, watch } from "vue";
 import LeadService from "../services/LeadService.js";
+import AuthService from "../services/AuthService.js";
 import { useVuelidate } from "@vuelidate/core";
 import { required, email, helpers } from "@vuelidate/validators";
 import { useToast } from "vue-toast-notification";
@@ -91,7 +124,10 @@ export default {
     },
     setup: () => {
         const leadService = new LeadService();
+        const authService = new AuthService();
         const leadForm = ref({ email: "", name: "" });
+        const loginForm = ref({ email: "", password: "" });
+        const hasToken = ref(false);
         const toast = useToast();
         const rules = computed(() => ({
             name: {
@@ -135,7 +171,52 @@ export default {
             await leadService.sendLead(leadForm.value);
         }
 
-        return { leadForm, sendSubmit, cards };
+        function goToLeads() {
+            window.location = "/leads";
+        }
+
+        const loginRules = computed(() => ({
+            password: {
+                required: helpers.withMessage(
+                    "O campos senha é brigatório",
+                    required
+                ),
+            },
+            email: {
+                required: helpers.withMessage(
+                    "O campos email é brigatório",
+                    required
+                ),
+                email,
+            },
+        }));
+
+        const v_login$ = useVuelidate(loginRules, loginForm.value);
+        async function makeLogin() {
+            v_login$.value.$touch();
+            if (v_login$.value.$errors.length) {
+                v_login$.value.$errors.map((error) => {
+                    toast.error(error.$message);
+                });
+                return;
+            }
+            await authService.login(loginForm.value);
+            hasToken.value = !!localStorage.getItem("token");
+        }
+
+        onMounted(() => {
+            hasToken.value = !!localStorage.getItem("token");
+        });
+
+        return {
+            leadForm,
+            loginForm,
+            sendSubmit,
+            cards,
+            goToLeads,
+            makeLogin,
+            hasToken,
+        };
     },
 };
 </script>
