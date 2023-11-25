@@ -44,6 +44,20 @@ Rotas:\
 [POST - leads/:id](http://127.0.0.1:8000/api/leads/1) Envia um email de contato para o id informado\
 [GET - leads](http://127.0.0.1:8000/api/leads) Retorna todos os leads cadastrados
 
+Acesso autenticado:
+Não foi feita uma tela para criação de usuários para autenticação, existe apenas a rota [POST - Register](http://127.0.0.1:8000/api/register)
+Crie um usuário para que possa ser possível fazer a listagem de leads e envio de email\
+Dados da Requisição:
+
+```json
+{
+    "name": "user",
+    "email": "root@gmail.com",
+    "password": "123123123",
+    "device_name": "WEB"
+}
+```
+
 Email:\
 A integração com o serviço de email foi criada, porém não foi configurada na plataforma a entrega do mesmo.\
 Para veriicar os emails enviados os dados de acessão são esses:
