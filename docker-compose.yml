@@ -6,7 +6,7 @@ services:
         build: .
         container_name: "laravel"
         ports:
-            - "8080:80"
+            - "8000:80"
         volumes:
             - ./:/usr/share/nginx
         networks:
